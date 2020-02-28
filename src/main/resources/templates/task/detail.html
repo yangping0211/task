@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: htmlhead(~{::title})">
+<meta charset="UTF-8">
+<title>タスク詳細</title>
+</head>
+<body>
+
+<main class="ui main container">
+  <h1 class="ui header">タスク詳細</h1>
+
+  <section id="taskDetail">
+    <table class="ui definition table">
+      <tbody>
+        <tr>
+          <td>タイトル</td>
+          <td th:text="${task.title()}">タイトル</td>
+        </tr>
+        <tr>
+          <td>期限日</td>
+          <td th:text="${task.dueDate()}">2020月02月28日</td>
+        </tr>
+        <tr>
+          <td>状態</td>
+          <td th:text="${task.status()}">未完了</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <a id="finishConfirmButton" class="ui primary button" type="submit"
+     th:unless="${#strings.equals(task.status(), '完了')}">完了</a>
+  <a id="deleteConfirmButton" class="ui primary button" type="submit">削除</a>
+  <a class="ui button" th:href="@{/tasks}">戻る</a>
+</main>
+
+<!-- 完了の確認 -->
+<div id="finishConfirmModal" class="ui mini modal">
+  <div class="content">
+    <p>このタスクを完了しますか？</p>
+  </div>
+  <div class="actions">
+    <div class="ui negative button">キャンセル</div>
+    <a class="ui positive button" th:href="@{/tasks/{taskId}/finish(taskId=${task.taskId()})}">完了</a>
+  </div>
+</div>
+
+<!-- 削除の確認 -->
+<div id="deleteConfirmModal" class="ui mini modal">
+  <div class="content">
+    <p>このタスクを削除しますか？</p>
+  </div>
+  <div class="actions">
+    <div class="ui negative button">キャンセル</div>
+    <a class="ui positive button" th:href="@{/tasks/{taskId}/delete(taskId=${task.taskId()})}">削除</a>
+  </div>
+</div>
+
+<script>
+  $('#finishConfirmButton').click(function () {
+    $('#finishConfirmModal').modal('show');
+  })
+
+  $('#deleteConfirmButton').click(function () {
+    $('#deleteConfirmModal').modal('show');
+  })
+</script>
+
+</body>
+</html>

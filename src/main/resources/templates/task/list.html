@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: htmlhead(~{::title})">
+<meta charset="UTF-8">
+<title>タスク一覧</title>
+</head>
+<body>
+<main class="ui main container">
+  <h1 class="ui header">タスク一覧</h1>
+
+  <section id="taskListHeader">
+    <a class="ui button" th:href="@{/tasks/register}">新規登録</a>
+  </section>
+
+  <section id="taskList">
+    <table class="ui compact celled table">
+      <thead>
+        <tr>
+          <th class="ten wide center aligned">タイトル</th>
+          <th class="center aligned">期限日</th>
+          <th class="center aligned">状態</th>
+          <th class="center aligned">機能</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="task : ${tasks.list()}">
+          <td th:text="${task.title()}"
+              th:class="${#strings.equals(task.status(), '完了')}? 'disabled': (${#strings.equals(task.status(), '期限切れ')}? 'red')">
+          </td>
+          <td class="center aligned" th:text="${task.dueDate()}"
+              th:classappend="${#strings.equals(task.status(), '完了')}? 'disabled': (${#strings.equals(task.status(), '期限切れ')}? 'red')">
+          </td>
+          <td class="center aligned" th:text="${task.status()}"
+              th:classappend="${#strings.equals(task.status(), '完了')}? 'disabled': (${#strings.equals(task.status(), '期限切れ')}? 'red')">
+          </td>
+          <td class="center aligned" th:classappend="${#strings.equals(task.status(), '期限切れ')}? 'red': ''">
+            <a class="ui primary button" th:href="@{/tasks/{taskId}(taskId=${task.taskId()})}">詳細</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: htmlhead(~{::title})">
+<meta charset="UTF-8">
+<title>タスク新規登録</title>
+</head>
+<body>
+
+<main class="ui main container">
+  <h1 class="ui header">タスク新規登録</h1>
+
+  <section id="taskInput">
+    <form class="ui form" method="post" th:object="${taskForm}" th:action="@{/tasks/register}">
+      <div th:replace="fragments/input/text::macro('title.value','タイトル','タイトル')">
+        <label>タイトル</label>
+      </div>
+      <div th:replace="fragments/input/calender::macro('dueDate.value','期限日','期限日')">
+        <label>期限日</label>
+      </div>
+      <button class="ui primary button" type="submit">登録</button>
+      <a class="ui button" th:href="@{/tasks}">戻る</a>
+    </form>
+  </section>
+</main>
+
+<script th:inline="javascript">
+  $('.ui.calendar').calendar({
+    type: 'date',
+    formatter: {
+      date: function (date, settings) {
+        if (!date) return '';
+        var year = ('000' + date.getFullYear()).slice(-4);
+        var month = ('0' + (date.getMonth() + 1)).slice(-2);
+        var day = ('0' + date.getDate()).slice(-2);
+        return year + '-' + month + '-' + day;
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

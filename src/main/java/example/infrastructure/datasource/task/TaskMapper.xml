@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="example.infrastructure.datasource.task.TaskMapper">
+  <sql id="selectTask">
+    SELECT
+    task.task_id as "taskId.value",
+    task.title as "title.value",
+    task.due_date as "dueDate.value",
+    task_finished.finished_at as "finishDateTime.value"
+    FROM task
+    LEFT JOIN task_finished ON (
+    task.task_id = task_finished.task_id
+    )
+  </sql>
+
+  <select id="selectByTaskId" resultType="example.domain.model.task.Task">
+    <include refid="selectTask"/>
+    WHERE task.task_id = #{taskId.value}
+  </select>
+
+  <select id="selectTasks" resultType="example.domain.model.task.Task">
+    <include refid="selectTask"/>
+    ORDER BY task.due_date ASC
+  </select>
+
+  <select id="newTaskId" resultType="Integer">
+    SELECT nextval('task_id')
+  </select>
+
+  <insert id="insertTask">
+    INSERT INTO task (task_id, title, due_date)
+    VALUES (#{taskId.value}, #{title.value}, #{dueDate.value})
+  </insert>
+
+  <insert id="insertFinishDateTime">
+    INSERT INTO task_finished (task_id)
+    VALUES (#{taskId.value})
+  </insert>
+
+  <delete id="deleteTask">
+    DELETE FROM task WHERE task.task_id = #{taskId.value}
+  </delete>
+</mapper>
